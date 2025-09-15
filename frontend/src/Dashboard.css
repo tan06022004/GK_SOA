@@ -10,7 +10,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #0a0a23 0%, #1e3a8a 100%);
+  background: linear-gradient(135deg, #6ee7b7, #3b82f6); /* giống login.css */
   color: #e0e7ff;
   min-height: 100vh;
   display: flex;
@@ -20,14 +20,35 @@ body {
 
 /* Container chính */
 .dashboard-container {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 2rem auto;
   padding: 2rem;
-  background: rgba(10, 10, 35, 0.95);
+  background: rgba(21, 21, 72, 0.9); /* giống login-box */
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2); /* viền xanh nhạt */
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1a73e8;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.toolbar-brand {
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.toolbar-nav {
+  display: flex;
+  gap: 10px;
 }
 
 /* Header */
@@ -35,7 +56,7 @@ body {
   text-align: center;
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -43,11 +64,8 @@ body {
 .header h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: #ffffff;
-  background: linear-gradient(90deg, #6366f1, #a855f7);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #fff;
+  text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc; /* neon cyan glow */
   margin-bottom: 0.5rem;
 }
 
@@ -79,18 +97,19 @@ body {
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-block:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 15px #00ffcc, 0 0 30px #3b82f6; /* glow xanh neon */
 }
 
 .form-block h3 {
   font-size: 1.2rem;
   font-weight: 500;
-  color: #a855f7;
+  color: #8b5cf6; /* tím neon đồng bộ button */
   margin-bottom: 1rem;
 }
 
@@ -99,13 +118,13 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem; /* Increased from 1rem to 2rem for more spacing */
   font-size: 0.95rem;
 }
 
 .info-row label {
   flex: 0 0 150px;
-  color: #a5b4fc;
+  color: #fff;
   font-weight: 500;
 }
 
@@ -113,11 +132,12 @@ body {
 .info-row span {
   flex: 1;
   padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.3);
   border-radius: 8px;
-  color: #e0e7ff;
+  color: #fff;
   font-size: 0.95rem;
+  transition: all 0.3s ease;
 }
 
 .info-row input[readonly] {
@@ -132,12 +152,13 @@ body {
   gap: 0.75rem;
   font-size: 0.9rem;
   color: #a0a0c0;
+  margin-top: 1rem; /* Added margin-top for spacing from info-row */
 }
 
 .checkbox-row input[type="checkbox"] {
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 20px; /* Fixed small size */
+  height: 20px;
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid #6366f1;
   border-radius: 4px;
@@ -158,7 +179,20 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   color: #ffffff;
-  font-size: 12px;
+  font-size: 10px; /* Adjusted for smaller size */
+}
+
+.checkbox-row label {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  padding: 0.75rem;
+  border-radius: 8px; /* Rounded corners */
+  border: 1px solid rgba(59, 130, 246, 0.2); /* Subtle border */
+  transition: border-color 0.2s ease;
+}
+
+.checkbox-row label:hover {
+  border-color: #60a5fa; /* Lighter border on hover */
 }
 
 /* Action Buttons */
@@ -177,13 +211,13 @@ body {
 .action-btn.primary {
   background: linear-gradient(to right, #10b981, #059669);
   color: #ffffff;
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+  box-shadow: none /*0 0 15px rgba(16, 185, 129, 0.4)*/;
 }
 
 .action-btn.primary:hover {
   background: linear-gradient(to right, #059669, #047857);
   transform: translateY(-3px);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+  box-shadow: none /*0 0 20px rgba(16, 185, 129, 0.6)*/;
 }
 
 .action-btn.primary:disabled {
@@ -193,16 +227,17 @@ body {
 }
 
 .action-btn.secondary {
-  background: transparent;
-  border: 2px solid #6366f1;
-  color: #6366f1;
+  background-color: #d32f2f;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .action-btn.secondary:hover {
-  background: #6366f1;
-  color: #ffffff;
-  transform: translateY(-3px);
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+  background-color: #b71c1c;
 }
 
 /* Responsive Design */
@@ -229,6 +264,28 @@ body {
   .info-row input,
   .info-row span {
     width: 100%;
+  }
+
+  .info-row {
+    margin-bottom: 1.5rem; /* Adjusted for mobile */
+  }
+
+  .checkbox-row {
+    margin-top: 0.75rem; /* Adjusted for mobile */
+  }
+
+  .checkbox-row input[type="checkbox"] {
+    width: 14px; /* Smaller size on mobile */
+    height: 14px;
+  }
+
+  .checkbox-row input[type="checkbox"]:checked::after {
+    font-size: 9px; /* Adjusted checkmark size for mobile */
+  }
+
+  .checkbox-row label {
+    padding: 0.5rem;
+    font-size: 0.8rem;
   }
 
   .action-btn {

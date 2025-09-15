@@ -20,7 +20,7 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     navigate('/');
-  };
+  }
 
   const handlePayment = () => {
     if (!agree) {
@@ -37,11 +37,15 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <div className="header">
-        <h1>Chào mừng, {fullName}!</h1>
-        <button className="action-btn secondary" onClick={handleLogout}>Đăng xuất</button>
+      <div className="toolbar">
+      <div className="toolbar-brand">Hệ thống thanh toán học phí</div>
+      <div className="toolbar-nav">
+        <button className="action-btn secondary" onClick={handleLogout}>
+          Đăng xuất
+        </button>
       </div>
-
+    </div>
+      
       {/* ================== FORM THANH TOÁN HỌC PHÍ ================== */}
       <div className="tuition-section">
         <h2>Thanh toán học phí</h2>
@@ -91,18 +95,19 @@ const Dashboard = () => {
             <label>Số tiền học phí:</label>
             <span>{tuitionFee.toLocaleString()} VND</span>
           </div>
-          <div className="info-row checkbox-row">
+          <div className="checkbox-row">
             <input
               type="checkbox"
               checked={agree}
               onChange={(e) => setAgree(e.target.checked)}
+              id="terms"
             />
-            <span>Tôi đồng ý với các điều khoản và điều kiện của hệ thống</span>
+            <label htmlFor="terms">Tôi đồng ý với các điều khoản và điều kiện của hệ thống</label>
           </div>
         </div>
 
         {/* 4. Nút xác nhận */}
-        <div className="form-block">
+        <div >
           <button
             className="action-btn primary"
             disabled={!agree}

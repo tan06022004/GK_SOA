@@ -16,7 +16,7 @@ const Login = () => {
       console.log('Login successful');
       navigate('/dashboard', { state: { username } }); // Truyền username qua state
     } else {
-      setError('Tên đăng nhập hoặc mật khẩu không đúng');
+      setError('Tên đăng nhập hoặc mật khẩu không đúng!');
       console.log('Login failed');
     }
   };
