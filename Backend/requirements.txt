@@ -1,0 +1,6 @@
+fastapi==0.104.1
+uvicorn==0.34.0
+pymongo==4.10.0
+bcrypt==4.2.1
+pydantic==2.10.6
+cryptography==43.0.1
