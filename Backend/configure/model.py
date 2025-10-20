@@ -1,36 +1,35 @@
-from ast import TryStar
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List
 from datetime import timezone, datetime
 from bson import ObjectId
 from passlib.context import CryptContext
-from db_connect import get_db
+from .db_connect import get_db
 import os
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated = "auto")
-
-
-class UserLogin(BaseModel):
-    username: str
+class StudentLogin(BaseModel):
+    mssv: str
     password: str
 
-class UserInfor(BaseModel):
+class StudentInfor(BaseModel):
     id: str
+    mssv: str
     name: str
     phone: str
     email: EmailStr
     balance: float
+    debt: float
 
-class StudentInfor(BaseModel):
+class StudentDebtInfor(BaseModel):
     mssv: str
     name: str
     debt: float
 
 class OTPRequest(BaseModel):
-    user_id: str
+    student_id: str
     mssv: str
-    balance: float = Field(gt=0)
+    amount: float = Field(gt=0)
 
 class OTPResponse(BaseModel):
     transaction_id: str
@@ -42,84 +41,106 @@ class PaymentRequest(BaseModel):
 class PaymentResponse(BaseModel):
     success: bool
     balance: Optional[float]
+    debt: Optional[float]
 
 class Transaction(BaseModel):
     transaction_id: str
-    mss: str
+    mssv: str
     amount: float
     status: str
-    createdd_at: datetime
-
+    created_at: datetime
 
 async def seed_data():
-    try: 
-
+    try:
         db = await get_db()
 
-        await db.user.delete_many({})
-        await db.student.delete_many({})
+        await db.students.drop()  
         await db.otps.delete_many({})
 
         hashed1 = pwd_context.hash("password1")
         hashed2 = pwd_context.hash("password2")
+        hashed3 = pwd_context.hash("password3")
+        hashed4 = pwd_context.hash("password4")
 
-        user1_id = str(ObjectId())
-        user2_id = str(ObjectId())
-
-        user1 = UserInfor(
-            id = user1_id,
-            name = "Do Duy Tan",
-            phone = "0237492930",
-            email = "tanbeo@gmail.com",
-            balance = 10000000.00
-        )
-
-        user2 = UserInfor(
-            id = user2_id,
-            name = "Nguyen Bui Hong Tien",
-            phone = "0858750342",
-            email = "tien@gmail.com",
-            balance = 50000000.00
-        )
-
-        await db.users.insert_many([
-            {
-            "id": ObjectId(user1_id),
-            "username": "user1",
-            "password": hashed1,
-            **user1.model_dump(exclude={"id"}),
-            "transaction": [],
-            "version": 0,
-            "created_at": datetime.now(timezone.utc)
-            },
-            {
-            "id": ObjectId(user2_id),
-            "username": "user2",
-            "password": hashed2,
-            **user2.model_dump(exclude={"id"}),
-            "transaction": [],
-            "version": 0,
-            "created_at": datetime.now(timezone.utc)
-            }
-        ])
+        student1_id = str(ObjectId())
+        student2_id = str(ObjectId())
+        student3_id = str(ObjectId())
+        student4_id = str(ObjectId())
 
         student1 = StudentInfor(
-            mssv = "SV001",
-            name = "Le Dat Lep",
-            debt = 300000.0
+            id=student1_id,
+            mssv="522H0042",
+            name="Nguyen Bui Hong Tien",
+            phone="0858750342",
+            email="tien@gmail.com",
+            balance=10000000.00,
+            debt=200000.00
         )
 
         student2 = StudentInfor(
-            mssv = "SV002",
-            name = "Chieng Quoc Ku",
-            debt = 400000.00
+            id=student2_id,
+            mssv="522H0089",
+            name="Zo Hoang Tan",
+            phone="0918977844",
+            email="tan@gmail.com",
+            balance=50000000.00,
+            debt=200000.00
+        )
+
+        student3 = StudentInfor(
+            id=student3_id,
+            mssv="522H0007",
+            name="Minh Khoi Dao",
+            phone="09189778234",
+            email="Khoi@gmail.com",
+            balance=50000000.00,
+            debt=300000.00
+        )
+
+        student4 = StudentInfor(
+            id=student4_id,
+            mssv="522H0012",
+            name="Nguyen Tan Beo",
+            phone="0918972342",
+            email="Beo@gmail.com",
+            balance=30000000.00,
+            debt=320000.00
         )
 
         await db.students.insert_many([
-            {**student1.model_dump(), "version": 0},
-            {**student2.model_dump(), "version": 0}
+            {
+                "_id": ObjectId(student1_id),
+                "password": hashed1,
+                **student1.model_dump(exclude={"id"}),
+                "transactions": [],
+                "version": 0,
+                "created_at": datetime.now(timezone.utc)
+            },
+            {
+                "_id": ObjectId(student2_id),
+                "password": hashed2,
+                **student2.model_dump(exclude={"id"}),
+                "transactions": [],
+                "version": 0,
+                "created_at": datetime.now(timezone.utc)
+            },
+            {
+                "_id": ObjectId(student3_id),
+                "password": hashed3,
+                **student3.model_dump(exclude={"id"}),
+                "transactions": [],
+                "version": 0,
+                "created_at": datetime.now(timezone.utc)
+            },
+            {
+                "_id": ObjectId(student4_id),
+                "password": hashed4,
+                **student4.model_dump(exclude={"id"}),
+                "transactions": [],
+                "version": 0,
+                "created_at": datetime.now(timezone.utc)
+            }
         ])
-
 
         print("Data Seed Successfully!")
 
@@ -130,4 +151,3 @@ async def seed_data():
 if __name__ == "__main__":
     import asyncio
     asyncio.run(seed_data())
-

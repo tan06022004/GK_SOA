@@ -3,21 +3,46 @@ import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [mssv, setMssv] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (username === 'user123' && password === '123456') {
-      console.log('Login successful');
-      navigate('/dashboard', { state: { username } }); // Truyền username qua state
-    } else {
-      setError('Tên đăng nhập hoặc mật khẩu không đúng!');
-      console.log('Login failed');
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:8000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mssv, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Đăng nhập thất bại!');
+      }
+
+      const studentData = await response.json();
+      if (!studentData.id || !studentData.mssv) {
+        throw new Error('Dữ liệu sinh viên không hợp lệ!');
+      }
+
+      console.log('Đăng nhập thành công:', studentData);
+      localStorage.setItem('user', JSON.stringify(studentData)); // Thay key 'student' thành 'user'
+      navigate('/dashboard', { state: { user: studentData } }); // Thay key 'student' thành 'user'
+    } catch (err) {
+      const errorMessage = err.message === 'Invalid Credentials'
+        ? 'MSSV hoặc mật khẩu không đúng!'
+        : err.message || 'Có lỗi xảy ra khi đăng nhập!';
+      setError(errorMessage);
+      console.error('Đăng nhập thất bại:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -28,22 +53,23 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>Đăng nhập</h2>
+        <h2>Đăng Nhập Hệ Thống Thanh Toán</h2>
         {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="form-group ">
-            <label htmlFor="username">Tên đăng nhập</label>
+          <div className="form-group">
+            <label htmlFor="mssv">MSSV</label>
             <input
               type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Nhập tên đăng nhập"
+              id="mssv"
+              value={mssv}
+              onChange={(e) => setMssv(e.target.value.trim())}
+              placeholder="Nhập MSSV"
               required
+              disabled={isLoading}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Mật khẩu</label>
+            <label htmlFor="password">Mật Khẩu</label>
             <div className="password-wrapper">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -52,6 +78,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Nhập mật khẩu"
                 required
+                disabled={isLoading}
               />
               <span
                 className="password-toggle"
@@ -89,7 +116,9 @@ const Login = () => {
               </span>
             </div>
           </div>
-          <button type="submit">Đăng nhập</button>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Đang xử lý...' : 'Đăng Nhập'}
+          </button>
         </form>
       </div>
     </div>
