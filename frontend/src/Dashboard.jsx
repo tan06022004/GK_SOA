@@ -33,8 +33,7 @@ const Dashboard = () => {
   };
 
   // Lấy danh sách giao dịch
-  const fetchTransactions = useCallback(
-    debounce(async () => {
+  const fetchTransactions = debounce(async () => {
       if (!user.id || Date.now() - lastFetchRef.current < 1000) return;
       lastFetchRef.current = Date.now();
       try {
@@ -58,9 +57,7 @@ const Dashboard = () => {
         }
         console.error('Fetch transactions failed:', err);
       }
-    }, 1000),
-    [user.id]
-  );
+    }, 1000);
 
   // Lấy thông tin sinh viên (không debounce trong handlePayment)
   const fetchStudentInfoDirect = async () => {
@@ -94,23 +91,20 @@ const Dashboard = () => {
   };
 
   // Lấy thông tin sinh viên với debounce cho useEffect
-  const fetchStudentInfo = useCallback(
-    debounce(fetchStudentInfoDirect, 1000),
-    [user.mssv]
-  );
+  const fetchStudentInfo = debounce(fetchStudentInfoDirect, 1000);
 
   // Gọi API khi component mount
   useEffect(() => {
-    isMounted.current = true;
-    if (user && user.id && user.mssv) {
-      fetchTransactions();
-      fetchStudentInfo();
-    }
+  isMounted.current = true;
+  if (user?.id && user?.mssv) {
+    fetchTransactions();
+    fetchStudentInfo();
+  }
 
-    return () => {
-      isMounted.current = false;
-    };
-  }, [fetchTransactions, fetchStudentInfo, user.id, user.mssv]);
+  return () => {
+    isMounted.current = false;
+  };
+}, [fetchTransactions, fetchStudentInfo, user]);
 
   // Kiểm tra đăng nhập
   if (!user || !user.id) {
@@ -504,7 +498,7 @@ const Dashboard = () => {
           {transactions.length > 0 ? (
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
               <thead>
-                <tr style={{ background: '#f0f0f0' }}>
+                <tr style={{ background: '#317257ff' }}>
                   <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID Giao dịch</th>
                   <th style={{ border: '1px solid #ddd', padding: '8px' }}>MSSV</th>
                   <th style={{ border: '1px solid #ddd', padding: '8px' }}>Số tiền</th>
