@@ -72,7 +72,7 @@ async def seed_data():
             mssv="522H0042",
             name="Nguyen Bui Hong Tien",
             phone="0858750342",
-            email="tien@gmail.com",
+            email="hongtien18102004@gmail.com",
             balance=10000000.00,
             debt=200000.00
         )
@@ -82,7 +82,7 @@ async def seed_data():
             mssv="522H0089",
             name="Zo Hoang Tan",
             phone="0918977844",
-            email="tan@gmail.com",
+            email="tiennguyenbuihongtien@gmail.com",
             balance=50000000.00,
             debt=200000.00
         )
@@ -102,7 +102,7 @@ async def seed_data():
             mssv="522H0012",
             name="Nguyen Tan Beo",
             phone="0918972342",
-            email="Beo@gmail.com",
+            email="dotan5600@gmail.com",
             balance=30000000.00,
             debt=320000.00
         )
